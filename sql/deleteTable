@@ -1,0 +1,27 @@
+CREATE OR REPLACE PROCEDURE public.delete_subs(
+	IN new_id integer)
+LANGUAGE 'sql'
+AS $BODY$
+delete from subscribers where id = new_id;
+$BODY$;
+
+CREATE OR REPLACE PROCEDURE public.delete_service(
+	IN new_id integer)
+LANGUAGE 'sql'
+AS $BODY$
+delete from services where id = new_id;
+$BODY$;
+
+CREATE OR REPLACE PROCEDURE public.delete_indacc(
+	IN new_id integer)
+LANGUAGE 'sql'
+AS $BODY$
+delete from individual_account where id = new_id;
+$BODY$;
+
+CREATE OR REPLACE PROCEDURE public.delete_status(
+	IN new_id integer)
+LANGUAGE 'sql'
+AS $BODY$
+delete from status where id = new_id;
+$BODY$;
