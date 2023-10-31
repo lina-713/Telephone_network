@@ -17,3 +17,23 @@ AS $BODY$
 insert into services(name_service, price, explain) 
 	values (new_name, new_price, new_explain);
 $BODY$;
+
+CREATE OR REPLACE PROCEDURE public.add_new_status(
+	IN new_name text)
+LANGUAGE 'sql'
+AS $BODY$
+insert into status(name) 
+	values (new_name);
+$BODY$;
+
+CREATE OR REPLACE PROCEDURE public.add_new_subs(
+	IN new_surname text,
+	IN new_name text,
+	IN new_contact integer,
+	IN new_accnumber integer,
+	IN new_status integer)
+LANGUAGE 'sql'
+AS $BODY$
+insert into subscribers(surname, name, contact_number, account_number, status) 
+	values (new_surname, new_name, new_contact, new_accnumber, new_status);
+$BODY$;
