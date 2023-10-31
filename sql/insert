@@ -7,3 +7,13 @@ AS $BODY$
 insert into individual_account(id_sub, balance, serv) 
 	values (new_id_sub, new_balance, new_serv);
 $BODY$;
+
+CREATE OR REPLACE PROCEDURE public.add_new_service(
+	IN new_name text,
+	IN new_price integer,
+	IN new_explain text)
+LANGUAGE 'sql'
+AS $BODY$
+insert into services(name_service, price, explain) 
+	values (new_name, new_price, new_explain);
+$BODY$;
