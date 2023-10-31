@@ -1,0 +1,9 @@
+CREATE OR REPLACE PROCEDURE public.add_new_indacc(
+	IN new_id_sub integer,
+	IN new_balance integer,
+	IN new_serv integer)
+LANGUAGE 'sql'
+AS $BODY$
+insert into individual_account(id_sub, balance, serv) 
+	values (new_id_sub, new_balance, new_serv);
+$BODY$;
