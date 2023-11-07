@@ -13,3 +13,21 @@ begin
 	RETURN QUERY EXECUTE format('select DISTINCT %I, %I from status', col_1, col_2);
 end;
 $BODY$;
+
+
+CREATE OR REPLACE FUNCTION public.fill_status2(
+	col_1 text,
+	col_2 text)
+    RETURNS TABLE(id integer, name text, count integer) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+AS $BODY$
+begin
+	
+	RETURN QUERY EXECUTE format('select DISTINCT status.%I, status.%I , (select * from count_status(subscribers.status)) as count 
+								from status 
+								left join subscribers on status.id = subscribers.status;', col_1, col_2, col_1 );
+end;
+$BODY$
