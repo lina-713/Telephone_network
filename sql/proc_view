@@ -1,0 +1,137 @@
+create or replace procedure add_account_view(
+	oldtable accounts
+	newtable accounts)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	insert into accounts(surname, name,contact_number, account_number, balance, status) 
+	values(newtable.surname, newtable.name, newtable.contact_number, newtable.account_number, newtable.balance, newtable.status);
+end;
+$body$;
+
+reate or replace procedure update_account_view(
+	oldtable accounts
+	newtable accounts)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BE
+	update accounts set 
+	surname = newtable.surname, 
+	name = newtable.name, 
+	contact_number = newtable.contact_number ,
+	account_number = newtable.account_number , 
+	balance = newtable.balance, 
+	status = newtable.status
+	where id = newtable.id
+end;
+$body$;
+
+
+create or replace procedure delete_account_view(
+	newtable accounts)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BE
+	delete accounts where id = newtable.id
+end;
+$body$;
+
+
+create or replace procedure add_indacc_view(
+	oldtable view_indacc
+	newtable view_indacc)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	insert into view_indacc(account_number, name_service) 
+	values(newtable.account_number, newtable.name_service);
+end;
+$body$;
+
+create or replace procedure update_indacc_view(
+	oldtable view_indacc
+	newtable view_indacc)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	update view_indacc set 
+	account_number = newtable.account_number, 
+	name_service = newtable.name_service
+	where id = newtable.id;
+end;
+$body$;
+
+create or replace proceduew delete_view_indacc(
+newtable view_indacc)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	delete view_indivacc where id = newtable.id;
+end;
+$body$;
+
+
+create or replace procedure add_view_services(
+	oldtable view_services
+	newtable view_services)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	insert into view_services(name_service, price, explain, sum_services) 
+	values(newtable.name_service,  newtable.price, newtable.explain, new.table.sum_services);
+end;
+$body$;
+
+
+create or replace procedure update_view_services(
+	oldtable view_services
+	newtable view_services)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	update view_services
+	set name_servicev= newtable.name_service,  
+	price = newtable.price, 
+	explain =  newtable.explain, 
+	sum_services = newtable.sum_services
+	where id = newtable.id
+end;
+$body$;
+
+create or replace proceduew delete_view_services(
+newtable view_services)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	delete view_services where id = newtable.id;
+end;
+$body$;
+
+
