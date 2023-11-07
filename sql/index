@@ -1,0 +1,14 @@
+CREATE INDEX IF NOT EXISTS index_status
+    ON public.status USING btree
+    (name ASC NULLS LAST)
+    TABLESPACE pg_default; 
+
+CREATE INDEX IF NOT EXISTS index_subscribers
+    ON public.subscribers USING btree
+    (account_number ASC NULLS LAST)
+    TABLESPACE pg_default; 
+
+CREATE INDEX IF NOT EXISTS index_services
+    ON public.services USING btree
+    (price ASC NULLS LAST)
+    TABLESPACE pg_default; 
