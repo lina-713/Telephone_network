@@ -1,0 +1,46 @@
+
+CREATE OR REPLACE VIEW public.accounts
+ AS
+ SELECT subscribers.id,
+    subscribers.surname,
+    subscribers.name,
+    subscribers.contact_number,
+    subscribers.account_number,
+    subscribers.balance,
+    ( SELECT status_1.name
+           FROM status status_1
+          WHERE status_1.id = subscribers.status) AS status
+   FROM subscribers
+     LEFT JOIN individual_account ON subscribers.id = individual_account.id_sub
+     LEFT JOIN status ON subscribers.status = status.id;
+
+
+CREATE OR REPLACE VIEW public.view_indivacc
+ AS
+ SELECT individual_account.id,
+    ( SELECT subscribers.account_number
+           FROM subscribers
+          WHERE subscribers.id = individual_account.id_sub) AS account_number,
+    ( SELECT services.name_service
+           FROM services
+          WHERE services.id = individual_account.serv) AS name_service
+   FROM individual_account;
+
+CREATE OR REPLACE VIEW public.view_services
+ AS
+ SELECT services.id,
+    services.name_service,
+    services.price,
+    services.explain,
+    ( SELECT sum(individual_account_1.serv) AS sum
+           FROM individual_account individual_account_1,
+            services services_1
+          WHERE individual_account_1.serv = services_1.id) AS sum_services
+   FROM services
+     LEFT JOIN individual_account ON services.id = individual_account.serv;
+
+CREATE OR REPLACE VIEW public.view_status
+ AS
+ SELECT status.id,
+    status.name
+   FROM status;
