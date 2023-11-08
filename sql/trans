@@ -1,0 +1,18 @@
+
+CREATE OR REPLACE PROCEDURE public.trans_func(
+	)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin 
+call curs_procedure();
+if exists(select * from view_status2 where count_subs = 'Больше 10 пользователей с таким статусом' and (select substring(count_subs from 9 for 10) )>= 20)
+then 
+	update view_status2
+	set count_subs = 'Больше 20 пользователей' 
+	where view_status2.id = status.id;
+else 
+rollback;
+end if;
+commit;
+end;
+$BODY$;
