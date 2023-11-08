@@ -1,39 +1,132 @@
-CREATE OR REPLACE PROCEDURE public.update_subs(
-	IN new_id integer,
-	IN new_surname text,
-	IN new_name text,
-	IN new_contact integer,
-	IN new_accnumber integer,
-	IN new_status integer)
-LANGUAGE 'sql'
-AS $BODY$
-update subscribers set surname = new_surname, name = new_name, contact_number = new_contact, account_number = new_accnumber, status = new_status where id = new_id;
-$BODY$;
+create or replace function add_account_view(
+	oldTable accounts,
+	newTable accounts)
+	RETURNS void
+	LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $$
+BEGIN
+	insert into accounts(surname, name, contact_number, account_number, balance, status) 
+	values(newtable.surname, newtable.name, newtable.contact_number, newtable.account_number, newtable.balance, newtable.status);
+end;
+$$;
 
-CREATE OR REPLACE PROCEDURE public.update_service(
-	IN new_id integer,
-	IN new_name text,
-	IN new_price integer,
-	IN new_explain text)
-LANGUAGE 'sql'
-AS $BODY$
-update services set name_service = new_name, price = new_price, explain = new_explain where id = new_id;
-$BODY$;
+create or replace function update_account_view(
+	oldtable accounts,
+	newtable accounts)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $$
+BEGIN
+	update accounts set 
+	surname = newtable.surname, 
+	name = newtable.name, 
+	contact_number = newtable.contact_number ,
+	account_number = newtable.account_number , 
+	balance = newtable.balance, 
+	status = newtable.status
+	where id = newtable.id;
+end;
+$$;
 
-CREATE OR REPLACE PROCEDURE public.update_indacc(
-	IN new_id integer,
-	IN new_id_sub integer,
-	IN new_balance integer,
-	IN new_serv integer)
-LANGUAGE 'sql'
-AS $BODY$
-update individual_account set id_sub = new_id_sub, balance = new_balance, serv = new_serv where id = new_id;
-$BODY$;
+create or replace function delete_account_view(
+	oldtable accounts)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $$
+BEGIN
+	delete from accounts where id = oldtable.id;
+end;
+$$;
 
-CREATE OR REPLACE PROCEDURE public.update_status(
-	IN new_id integer,
-	IN new_name text)
-LANGUAGE 'sql'
-AS $BODY$
-update status set name = new_name where id = new_id;
-$BODY$;
+create or replace function add_indacc_view(
+	oldtable view_indivacc,
+	newtable view_indivacc)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $$
+BEGIN
+	insert into view_indivacc(account_number, name_service) 
+	values(newtable.account_number, newtable.name_service);
+end;
+$$;
+
+create or replace function update_indacc_view(
+	oldtable view_indivacc,
+	newtable view_indivacc)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $$
+BEGIN
+	update view_indivacc set 
+	account_number = newtable.account_number, 
+	name_service = newtable.name_service
+	where id = newtable.id;
+end;
+$$;
+
+create or replace function delete_view_indacc(
+	oldtable view_indivacc)
+	RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $$
+BEGIN
+	delete from view_indivacc where id = oldtable.id;
+end;
+$$;
+
+
+create or replace function add_view_services(
+	oldtable view_services,
+	newtable view_services)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $$
+BEGIN
+	insert into view_services(name_service, price, explain, sum_services) 
+	values(newtable.name_service,  newtable.price, newtable.explain, new.table.sum_services);
+end;
+$$;
+
+create or replace function update_view_services(
+	oldtable view_services,
+	newtable view_services)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $$
+BEGIN
+	update view_services
+	set name_servicev= newtable.name_service,  
+	price = newtable.price, 
+	explain =  newtable.explain, 
+	sum_services = newtable.sum_services
+	where id = newtable.id;
+end;
+$$;
+
+create or replace function delete_view_services(
+oldtable view_services)
+RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $$
+BEGIN
+	delete from view_services where id = oldtable.id;
+end;
+$$;
