@@ -1,0 +1,38 @@
+CREATE OR REPLACE function public.curs_funct()
+returns void
+LANGUAGE 'plpgsql'
+AS $BODY$
+declare 
+cur cursor for Select * from view_status;
+full_counts int;
+counts RECORD;
+BEGIN
+open cur;
+loop
+fetch cur into counts;
+exit when not found;
+full_counts := (select COUNT(status) from subscribers,status where subscribers.status = status.id);
+case
+	when full_counts > 10 then update view_status set count_subs = Concat('Больше 10 пользователей с таким статусом') where view_status.id = counts.id;
+	else update view_status set count_subs = Concat('Меньше 10 пользователей с таким статусом') where view_status.id = counts.id;
+end case;
+end loop;
+close cur;
+end;
+$BODY$;
+
+
+CREATE OR REPLACE trigger "update_viewstatus"
+    INSTEAD of UPDATE on view_status
+    for each row
+	execute function function1();
+
+CREATE OR REPLACE function public.function1()
+returns trigger
+LANGUAGE 'plpgsql'
+AS $BODY$
+BEGIN
+	perform curs_funct();
+	return null;
+end;
+$BODY$;
