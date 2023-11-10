@@ -46,47 +46,35 @@ end;
 $body$;
 
 
-create or replace procedure add_indacc_view(
-	oldtable view_indacc
-	newtable view_indacc)
-RETURNS void
+CREATE OR REPLACE FUNCTION public.delete_view_indacc(
+	oldtable view_indivacc)
+    RETURNS void
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 BEGIN
-	insert into view_indacc(account_number, name_service) 
-	values(newtable.account_number, newtable.name_service);
+	delete from view_indivacc where id = oldtable.id;
 end;
-$body$;
+$BODY$;
 
-create or replace procedure update_indacc_view(
-	oldtable view_indacc
-	newtable view_indacc)
-RETURNS void
+CREATE OR REPLACE FUNCTION public.update_indacc_view(
+	oldtable view_indivacc,
+	newtable view_indivacc)
+    RETURNS void
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 BEGIN
-	update view_indacc set 
+	update view_indivacc set 
 	account_number = newtable.account_number, 
-	name_service = newtable.name_service
+	name_service = newtable.name_service,
+	total_price = newtable.total_price, 
+	dolg = newtable.dolg
 	where id = newtable.id;
 end;
-$body$;
-
-create or replace proceduew delete_view_indacc(
-newtable view_indacc)
-RETURNS void
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
-BEGIN
-	delete view_indivacc where id = newtable.id;
-end;
-$body$;
+$BODY$;
 
 
 create or replace procedure add_view_services(
