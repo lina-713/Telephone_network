@@ -46,6 +46,21 @@ end;
 $body$;
 
 
+CREATE OR REPLACE FUNCTION public.add_indacc_view(
+	oldtable view_indivacc,
+	newtable view_indivacc)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	insert into view_indivacc(account_number, name_service, total_price, dolg) 
+	values(newtable.account_number, newtable.name_service, newtable.total_price, newtable.dolg);
+end;
+$BODY$;
+
+
 CREATE OR REPLACE FUNCTION public.delete_view_indacc(
 	oldtable view_indivacc)
     RETURNS void
